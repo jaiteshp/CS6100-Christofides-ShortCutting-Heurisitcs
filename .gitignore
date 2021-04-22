@@ -1,1 +1,3 @@
 .gitmodules
+*.o
+Matching/*.o
