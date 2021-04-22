@@ -138,9 +138,9 @@ int main(int argc, char * argv[])
 		    ReadEuclideanGraph(filename, G, X, Y, cost);
 		}
 
-		pair< vector<int> , double > p = Christofides(G, cost);
+		pair< vector<int> , double > p = Christofides(G, cost, filename);
 
-		cout << "Solution cost: " << p.second << endl;
+		// cout << "Solution cost: " << p.second << endl;
 
 		vector<int> s = p.first;
 

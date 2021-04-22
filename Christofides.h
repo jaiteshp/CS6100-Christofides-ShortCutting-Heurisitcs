@@ -241,8 +241,18 @@ double shortcutting_triangle_comp(vector<int> &solution,vector< vector<int> > &A
 	return obj;
 }
 
+void solutionParser(unordered_map <string, int> &ump) {
+	FILE *file = fopen("TSPLIB/solutions", "r");
+	char tspName[100];
+	char temp[100];
+	int cost;
+	while((fscanf(file, "%s %s %d", tspName, temp, &cost)) != EOF) {
+		ump[tspName] = cost;
+	}
+	return;
+}
 
-pair< vector<int>, double > Christofides(const Graph & G, const vector<double> & cost)
+pair< vector<int>, double > Christofides(const Graph & G, const vector<double> & cost, string filename)
 {
 	//Solve minimum spanning tree problem
 	pair< list<int>, double > p = Prim(G, cost);
@@ -323,7 +333,21 @@ pair< vector<int>, double > Christofides(const Graph & G, const vector<double> &
 	vector <int> solution3;
 	double obj3 = shortcutting_triangle_comp(solution3,A ,traversed,G, cost);
 
-	printf("simple:%d\ntri opt:%d\ntri comp:%d\n",(int)obj1,(int)obj2,(int)obj3);
+
+	unordered_map <string, int> ump;
+	solutionParser(ump);
+
+	
+
+	
+	string fileNameShort = filename.substr(7, filename.size());
+	for(int i = 0; i < 4; i++) fileNameShort.pop_back();
+	
+	double optimalCost = (double) ump[fileNameShort];
+
+	printf("simple:\t\t%.6lf\t%d\ntri opt:\t%.6lf\t%d\ntri comp:\t%.6lf\t%d\n",(obj1/optimalCost), (int) obj1,
+	 (obj2/optimalCost), (int) obj2, 
+	 (obj3/optimalCost), (int) obj3);
 
 	return pair< vector<int>, double >(solution3, obj3);
 }
