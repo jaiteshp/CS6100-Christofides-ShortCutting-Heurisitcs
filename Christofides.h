@@ -324,6 +324,15 @@ void applyDegreeIncHeurisitc(vector <vector <int>> &adj, int N, int degLimit) {
 		}
 	}
 
+	for(int i = 0; i < N; i++) adj[i].clear();
+	for(int i = 0; i < N; i++) {
+		for(int j = 0; j < N; j++) {
+			if(mat[i][j]) {
+				adj[i].push_back(j);
+			}
+		}
+	}
+
 	return;
 }
 
