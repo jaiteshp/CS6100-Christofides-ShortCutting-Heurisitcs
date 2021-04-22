@@ -258,11 +258,72 @@ void pv(vector <int> &v) {
 }
 
 void applyDegreeIncHeurisitc(vector <vector <int>> &adj, int N, int degLimit) {
-	// for(int i = 0; i < N; i++) {
-	// 	pv(adj[i]);
-	// }
-	int root = 0;
-	// while()
+	vector <vector <int>> mat(N, vector <int> (N, 0));
+	vector <int> deg(N, 0);
+	for(int i = 0; i < N; i++) {
+		for(auto u : adj[i]) {
+			mat[i][u] = 1;
+			mat[u][i] = 1;
+			deg[i]++;
+			deg[u]++;
+		}
+	}
+	for(int i = 0; i < N; i++) deg[i] /= 2;
+
+	int root = -1;
+	for(int i = 0; i < N; i++) {
+		if(deg[i] == 1) {
+			root = i;
+			break;
+		}
+	}
+
+	int rootChild = -1;
+	for(int i = 0; i < N; i++) {
+		if(mat[root][i] == 1) {
+			rootChild = i;
+			break;
+		}
+	}
+	assert(rootChild != -1);
+
+	vector <int> parent(N, -1);
+	parent[rootChild] = root;
+
+	queue <int> q;
+
+	for(int i = 0; i < N; i++) {
+		if(mat[rootChild][i] && (i != parent[rootChild])) {
+			parent[i] = rootChild;
+			q.push(i);
+		}
+	}
+
+	while(q.size()) {
+		int v = q.front();
+
+		for(int i = 0; i < N; i++) {
+			if(mat[v][i] && (i != parent[v])) {
+				parent[i] = v;
+				q.push(i);
+			}
+		}
+
+		if(deg[parent[v]] + deg[v] <= degLimit) {
+			for(int i = 0; i < N; i++) {
+				if(mat[v][i] && (i != parent[v])) {
+					parent[i] = parent[v];
+					mat[v][i] = 0;
+					mat[i][v] = 0;
+					mat[parent[v]][i] = 1;
+					mat[i][parent[v]] = 1;
+					deg[v]--;
+					deg[parent[v]]++;
+				}
+			}
+		}
+	}
+
 	return;
 }
 
