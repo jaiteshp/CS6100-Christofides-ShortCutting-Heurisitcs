@@ -1,4 +1,4 @@
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 #include "MST.h"
 #include "./Matching/Matching.h"
 #include "./Matching/Graph.h"
@@ -252,23 +252,22 @@ void solutionParser(unordered_map <string, int> &ump) {
 	return;
 }
 
-pair< vector<int>, double > Christofides(const Graph & G, const vector<double> & cost, string filename)
-{
-	//Solve minimum spanning tree problem
-	pair< list<int>, double > p = Prim(G, cost);
-	list<int> mst = p.first;
+void pv(vector <int> &v) {
+	for(int i = 0; i < v.size(); i++) cout << v[i] << " ";
+	cout << endl;
+}
 
-	//Build adjacency lists using edges in the tree
-	vector< vector<int> > A(G.GetNumVertices(), vector<int>());
-	for(list<int>::iterator it = mst.begin(); it != mst.end(); it++)
-	{
-		pair<int, int> p = G.GetEdge(*it);
-		int u = p.first, v = p.second;
+void applyDegreeIncHeurisitc(vector <vector <int>> &adj, int N, int degLimit) {
+	// for(int i = 0; i < N; i++) {
+	// 	pv(adj[i]);
+	// }
+	int root = 0;
+	// while()
+	return;
+}
 
-		A[u].push_back(v);
-		A[v].push_back(u);
-	}
-
+void buildTraversed(vector <int> &traversed, const Graph &G, vector <vector <int>> &A, const vector<double> &cost) {
+	
 	//Find vertices with odd degree
 	vector<int> odd;
 	for(int u = 0; u < G.GetNumVertices(); u++)
@@ -292,7 +291,7 @@ pair< vector<int>, double > Christofides(const Graph & G, const vector<double> &
 
 	//Find the minimum cost perfect matching of the graph of the odd degree vertices
 	Matching M(O);
-	p = M.SolveMinimumCostPerfectMatching(costO);
+	pair< list<int>, double > p = M.SolveMinimumCostPerfectMatching(costO);
 	list<int> matching = p.first;
 
 	//Add the edges in the matching the the adjacency list
@@ -306,7 +305,7 @@ pair< vector<int>, double > Christofides(const Graph & G, const vector<double> &
 	}
 
 	//This is to keep track of how many times we can traverse an edge
-	vector<int> traversed(G.GetNumEdges(), 0);
+	// vector<int> traversed(G.GetNumEdges(), 0);
 	for(int u = 0; u < G.GetNumVertices(); u++)
 	{
 		for(vector<int>::iterator it = A[u].begin(); it != A[u].end(); it++)
@@ -319,8 +318,40 @@ pair< vector<int>, double > Christofides(const Graph & G, const vector<double> &
 			traversed[G.GetEdgeIndex(u, v)]++;
 		}
 	}
+	return;
+}
+
+pair< vector<int>, double > Christofides(const Graph & G, const vector<double> & cost, string filename)
+{
+	//Solve minimum spanning tree problem
+	pair< list<int>, double > p = Prim(G, cost);
+	list<int> mst = p.first;
+
+	//Build adjacency lists using edges in the tree
+	vector< vector<int> > A(G.GetNumVertices(), vector<int>());
+	for(list<int>::iterator it = mst.begin(); it != mst.end(); it++)
+	{
+		pair<int, int> p = G.GetEdge(*it);
+		int u = p.first, v = p.second;
+
+		A[u].push_back(v);
+		A[v].push_back(u);
+	}
+
+	vector <vector <int>> A1;
+	for(auto v1 : A) {
+		A1.push_back(vector <int> (v1));
+	}
+
+	applyDegreeIncHeurisitc(A1, G.GetNumVertices(), 4);
 
 	//Find an Eulerian cycle in the graph implied by A
+	
+	vector<int> traversed(G.GetNumEdges(), 0);
+	buildTraversed(traversed, G, A, cost);
+	vector<int> traversedHeur(G.GetNumEdges(), 0);
+	buildTraversed(traversedHeur, G, A1, cost);
+
 	list<int> cycle;
 	euler_cycle(cycle,A,G,traversed);
 
@@ -332,6 +363,9 @@ pair< vector<int>, double > Christofides(const Graph & G, const vector<double> &
 
 	vector <int> solution3;
 	double obj3 = shortcutting_triangle_comp(solution3,A ,traversed,G, cost);
+
+	vector <int> solution4;
+	double obj4 = shortcutting_triangle_comp(solution4,A1 ,traversedHeur,G, cost);
 
 
 	unordered_map <string, int> ump;
@@ -345,9 +379,10 @@ pair< vector<int>, double > Christofides(const Graph & G, const vector<double> &
 	
 	double optimalCost = (double) ump[fileNameShort];
 
-	printf("simple:\t\t%.6lf\t%d\ntri opt:\t%.6lf\t%d\ntri comp:\t%.6lf\t%d\n",(obj1/optimalCost), (int) obj1,
+	printf("simple:\t\t%.6lf\t%d\ntri opt:\t%.6lf\t%d\ntri comp:\t%.6lf\t%d\ncompHeur:\t%.6lf\t%d\n",(obj1/optimalCost), (int) obj1,
 	 (obj2/optimalCost), (int) obj2, 
-	 (obj3/optimalCost), (int) obj3);
+	 (obj3/optimalCost), (int) obj3, 
+	 (obj4/optimalCost), (int) obj4);
 
 	return pair< vector<int>, double >(solution3, obj3);
 }
