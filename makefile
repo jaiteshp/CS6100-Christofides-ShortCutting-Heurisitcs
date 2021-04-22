@@ -19,5 +19,5 @@ Example.o: Example.cpp MST.h ./Matching/Matching.h ./Matching/Graph.h Christofid
 christofides: Matching.o BinaryHeap.o Graph.o Example.o TSPLIB_parser.o
 	g++ $(FLAG) Matching.o BinaryHeap.o Graph.o Example.o TSPLIB_parser.o -o christofides
 
-clean: 
-	-rm *.o $(objects)
+clean:
+	$(RM) count *.o *~
