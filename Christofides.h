@@ -253,7 +253,7 @@ void solutionParser(unordered_map <string, int> &ump) {
 }
 
 void pv(vector <int> &v) {
-	for(int i = 0; i < v.size(); i++) cout << v[i] << " ";
+	for(unsigned int i = 0; i < v.size(); i++) cout << v[i] << " ";
 	cout << endl;
 }
 
@@ -301,6 +301,7 @@ void applyDegreeIncHeurisitc(vector <vector <int>> &adj, int N, int degLimit) {
 
 	while(q.size()) {
 		int v = q.front();
+		q.pop();
 
 		for(int i = 0; i < N; i++) {
 			if(mat[v][i] && (i != parent[v])) {
@@ -413,7 +414,7 @@ pair< vector<int>, double > Christofides(const Graph & G, const vector<double> &
 		A1.push_back(vector <int> (v1));
 	}
 
-	applyDegreeIncHeurisitc(A1, G.GetNumVertices(), 4);
+	applyDegreeIncHeurisitc(A1, G.GetNumVertices(), 5);
 
 	//Find an Eulerian cycle in the graph implied by A
 	
