@@ -5,12 +5,18 @@
 #include <list>
 #include <vector>
 #include <math.h>
+#include <iostream>
 using namespace std;
 
 class TSPLIB_parser
 {
 public:
-	TSPLIB_parser(string filename): filename(filename) { Read(); };
+	TSPLIB_parser(string filename): filename(filename) {
+		Read(1.0);
+	};
+	TSPLIB_parser(string filename, double perturbation_percentage): filename(filename) {
+		Read(perturbation_percentage);
+	};
 
 	const Graph & GetGraph() const { return G; };
 	const vector<int> & GetCosts() const { return cost; };
@@ -35,7 +41,7 @@ private:
 
 	string filename, name, type, EdgeWeightType, EdgeWeightFormat, EdgeDataType, NodeCoordType, DisplayDataType; 
 
-	void Read();
+	void Read(double perturbation_percentage);
 };
 
 
