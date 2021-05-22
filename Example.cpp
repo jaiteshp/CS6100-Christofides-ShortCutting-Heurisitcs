@@ -73,6 +73,7 @@ int main(int argc, char * argv[])
 	string filename = "";
 	string fileneato = "";
 	bool printSequence = false;
+	double perturbation_percentage = 1.0;	// Default is 1%
 
 	int i = 1;
 	while(i < argc)
@@ -80,12 +81,14 @@ int main(int argc, char * argv[])
 		string a(argv[i]);
 		if(a == "-f")
 			filename = argv[++i];
-		else if(a == "-p")
+		else if(a == "-ps")
 			printSequence = true;
 		else if(a == "-g")
 			fileneato = argv[++i];
 		else if(a == "--coord")
 			fileformat = "coord";
+		else if(a == "-p")
+			perturbation_percentage = atof(argv[++i]);
 		i++;
 	}
 
@@ -111,7 +114,7 @@ int main(int argc, char * argv[])
 	        try
 	        {
 		        //Read the TSPLIB file
-		        TSPLIB_parser T(filename);
+		        TSPLIB_parser T(filename, perturbation_percentage);
 		        G = T.GetGraph();
 
 		        //TSPLIB costs are integers, convert them to double
