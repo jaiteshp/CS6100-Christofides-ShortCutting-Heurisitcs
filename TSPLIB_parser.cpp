@@ -1,4 +1,7 @@
 #include "TSPLIB_parser.h"
+#include <chrono>
+#include <iostream>
+#include <random>
 
 void TSPLIB_parser::Read()
 {
@@ -65,10 +68,25 @@ void TSPLIB_parser::Read()
 
 				X.resize(n);
 				Y.resize(n);
+
+				unsigned seed = 
+				chrono::system_clock::now().time_since_epoch().count();
+				default_random_engine generator (seed);
+				
+				// Initializes the normal distribution
+				double sig=0.5;
+				normal_distribution<double> distribution (0.0,sig);
+				
+				
+				cout<<"n is "<<n<<endl;
 				for(int i = 0; i < n; i++)
 				{
 					int id;
 					file >> id >> X[i] >> Y[i];
+					X[i]+=distribution(generator);
+					Y[i]+=distribution(generator);
+					// if(i<n/2)X[i]+=1.1;
+					// else X[i]+=1.2;
 					if(EdgeWeightType == "GEO")
 					{
 						double PI = 3.141592;
@@ -82,10 +100,12 @@ void TSPLIB_parser::Read()
 				}
 				for(int i = 0; i < n; i++)
 				{
+					//X[i]=0.1;
 					for(int j = i+1; j < n; j++)
 					{
 						if(EdgeWeightType == "EUC_2D")
 						{
+							
 							double xd = X[i] - X[j];
 							double yd = Y[i] - Y[j];
 							cost[G.GetEdgeIndex(i, j)] = round( sqrt( xd*xd + yd*yd ) );
@@ -196,4 +216,3 @@ void TSPLIB_parser::Read()
 	
 	file.close();
 }
-
