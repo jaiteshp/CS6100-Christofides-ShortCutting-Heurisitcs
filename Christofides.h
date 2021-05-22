@@ -450,7 +450,7 @@ pair< vector<int>, double > Christofides(const Graph & G, const vector<double> &
 	
 	double optimalCost = (double) ump[fileNameShort];
 
-	printf("simple:\t\t%.6lf\t%d\ntri opt:\t%.6lf\t%d\ntri comp:\t%.6lf\t%d\ncompHeur:\t%.6lf\t%d\n",(obj1/optimalCost), (int) obj1,
+	printf("OptimalSoln:\t%.6lf\nSimple:\t\t%.6lf\t%d\nTri-Opt:\t%.6lf\t%d\nTri-Comp:\t%.6lf\t%d\nComp-Heur:\t%.6lf\t%d\n",optimalCost, (obj1/optimalCost), (int) obj1,
 	 (obj2/optimalCost), (int) obj2, 
 	 (obj3/optimalCost), (int) obj3, 
 	 (obj4/optimalCost), (int) obj4);
