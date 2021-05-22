@@ -3,7 +3,21 @@
 #include <iostream>
 #include <random>
 
-void TSPLIB_parser::Read()
+
+double setStdDeviation(double &stdDev, vector <double> &x, vector <double> &y, double percentage) {
+	int n = x.size();
+	double mnx = x[0], mxx = x[0], mny = y[0], mxy = y[0];
+	for(int i = 0; i < n; i++) {
+		mnx = min(mnx, x[i]);
+		mxx = max(mxx, x[i]);
+		mny = min(mny, y[i]);
+		mxy = max(mxy, y[i]);
+	}
+	stdDev = (min((mxx-mnx), (mxy-mny))*percentage)/100;
+	return stdDev;
+}
+
+void TSPLIB_parser::Read(double perturbation_percentage)
 {
 	ifstream file;
 	file.open(filename.c_str());
@@ -69,24 +83,10 @@ void TSPLIB_parser::Read()
 				X.resize(n);
 				Y.resize(n);
 
-				unsigned seed = 
-				chrono::system_clock::now().time_since_epoch().count();
-				default_random_engine generator (seed);
-				
-				// Initializes the normal distribution
-				double sig=0.5;
-				normal_distribution<double> distribution (0.0,sig);
-				
-				
-				cout<<"n is "<<n<<endl;
 				for(int i = 0; i < n; i++)
 				{
 					int id;
 					file >> id >> X[i] >> Y[i];
-					X[i]+=distribution(generator);
-					Y[i]+=distribution(generator);
-					// if(i<n/2)X[i]+=1.1;
-					// else X[i]+=1.2;
 					if(EdgeWeightType == "GEO")
 					{
 						double PI = 3.141592;
@@ -98,6 +98,21 @@ void TSPLIB_parser::Read()
 						Y[i] = PI * ( deg + 5.0 * min / 3.0 ) / 180.0;
 					}
 				}
+				
+				unsigned seed = chrono::system_clock::now().time_since_epoch().count();
+				default_random_engine generator (seed);
+				
+				// Initializes the normal distribution
+				double sig;
+				setStdDeviation(sig, X, Y, perturbation_percentage);
+				normal_distribution<double> distribution (0.0,sig);
+
+				// Perturbing points
+				for(int i = 0; i < n; i++) {
+					X[i]+=distribution(generator);
+					Y[i]+=distribution(generator);
+				}
+
 				for(int i = 0; i < n; i++)
 				{
 					//X[i]=0.1;
@@ -210,6 +225,20 @@ void TSPLIB_parser::Read()
 			{
 				int id;
 				file >> id >> X[i] >> Y[i];
+			}
+
+			unsigned seed = chrono::system_clock::now().time_since_epoch().count();
+			default_random_engine generator (seed);
+			
+			// Initializes the normal distribution
+			double sig;
+			setStdDeviation(sig, X, Y, perturbation_percentage);
+			normal_distribution<double> distribution (0.0,sig);
+
+			// Perturbing points
+			for(int i = 0; i < n; i++) {
+				X[i]+=distribution(generator);
+				Y[i]+=distribution(generator);
 			}
 		}
 	}
