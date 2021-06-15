@@ -1,4 +1,4 @@
-# A C++ implementation of the Christofides algorithm for instances in TSPLIB format
+# C++ implementation of Short-cutting heurisitcs for Christofides' algorithm
 
 To clone the repo and its dependencies (submodules): 
 ```
