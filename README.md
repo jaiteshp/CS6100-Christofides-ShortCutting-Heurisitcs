@@ -32,3 +32,5 @@ Example:
 ```
 
 `utils.ipynb` notebook is used to run all the experiments, tabulate the data and get required plots.
+
+Refer to tables `Heuristic<x>.csv` and `HeuristicV2<x>.csv` for all the data obtained in experiments.
