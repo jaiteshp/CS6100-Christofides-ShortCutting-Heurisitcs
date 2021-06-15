@@ -2,31 +2,33 @@
 
 To clone the repo and its dependencies (submodules): 
 ```
-git clone --recursive https://github.com/dilsonpereira/christofides-algorithm
+git clone https://github.com/jaiteshp/CS6100-Christofides-ShortCutting-Heurisitcs
 ```
 
-Compilation on Linux:
+Compilation (requires gnu-make):
 ```
 make christofides
 ```
-Usage:
+
+Cleaning executable files:
 ```
-./christofides -f <inputFile> [--coord] [-p] [-g <outputFile>]
+make clean
+```
+
+For running christofides' algorithm (all 4 heuristics) on a file:
+```
+./christofides -f <relativeFilePath> [-p] [-g <outputFile>]
 ```
 
 Option `-f` is used to specify the file name.
 
 The input file will be assumed to be in a TSPLIB format unless option `--coord` is provided. In that case, the first line of the file should give the number of vertices n followed by n lines giving the X and Y coordinates of the corresponding vertices.
 
-Option `-p` will print the edges in the solution. 
+Option `-p` can be used to specify the perturbation parameter. Default is 1%.    
 
-Option `-g` will output the solution in Graphviz neato format to *outpuFile*. If you have Graphviz installed and instance coordinates are available, you can generate an image of the solution by running
+Example:
 ```
-neato -Tps <christofidesOutputFile> > <image.eps>
+./christofides -f TSPLIB/a280.tsp -p 0.1
 ```
 
-This code also provides a module for parsing TSPLIB instances, a module for solving minimum spanning tree problems and a module for solving minimum cost perfect matching problems.
-
-See Example.cpp to learn how to use the library.
-
-Feel free to contact me if you have any problem.
+`utils.ipynb` notebook is used to run all the experiments, tabulate the data and get required plots.
